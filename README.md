@@ -13,7 +13,7 @@ The key work packages included in this project are:
 
 Notice that due to the computational power limitation, the ANN training will carried out on a separate server. The program for building the ANN model and carrying out the training is still included in the project folder.
 
-__Python 3.10__ is used to develop the majority part of this project. __TensorFlow__ and __TensorFlow Lite__ are the main machine learning engine used for image processing and ANN training.
+__Python 3.9__ is used to develop the majority part of this project. __TensorFlow__ and __TensorFlow Lite__ are the main machine learning engine used for image processing and ANN training.
 
 Git is used to manage and oversee the project development. A development log is given in the later part of this document.
 
