@@ -28,3 +28,23 @@ Git is used to manage and oversee the project development. A development log is 
 ---
 
 ## Testing Logs
+
+---
+
+## References
+
+* Books
+
+  > Szeliski, R., 2010. Computer vision: algorithms and applications. Springer Science & Business Media.
+
+  > Lakshmanan, V., Görner, M. and Gillard, R., 2021. Practical Machine Learning for Computer Vision. O'Reilly Media, Incorporated.
+
+* Tutorials
+
+  > freeCodeCamp.org, https://youtu.be/tPYj3fFJGjk
+
+  > Python Engineer, https://youtu.be/c36lUUr864M 
+
+  > Edge Electronics, https://youtu.be/aimSGOAUI8Y
+
+
