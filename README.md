@@ -110,6 +110,12 @@ The purpose of this work package is mainly to collect images of a kitchen, pre-p
 
 ### Collecting images
 
+There are multiple ways to program a piece of python code to collect massive JPG files taken from the Raspberry Pi Camera. To name a few, it is possible to use `PiCamera` package as used in the `test_camera.py` program, or use `VideoCapture` tool provided by `opencv-python`. Both of the above approaches should satisfy the purpose. Notice that `VideoCapture` approach is more general in the sense that it can be used not only on Raspberry Pi but also other devices as long as it has a camera. Therefore, `VideoCapture` approach is adopted for collecting images in this project.
+
+### Labeling images
+
+Labeling of images are done not on the IoT device, but on the server with a specific tool.
+
 
 ---
 
