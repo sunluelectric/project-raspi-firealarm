@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+"""
+sunlu - sunlu.electric@gmail.com
+"""
 from picamera import PiCamera
 import time
 
