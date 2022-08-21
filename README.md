@@ -92,6 +92,8 @@ from tflite_runtime.interpreter import Interpreter
 ```
 If there is no error messages, the installation is successful.
 
+### Test TensorFlow Lite using a pre-trained demo model
+
 
 
 
