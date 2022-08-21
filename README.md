@@ -71,6 +71,8 @@ Use `pip install tensorflow` to install TensorFlow.
 
 Use `pip install https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-cp39-cp39-linux_armv7l.whl` to install TensorFlow Lite runtime. Notice that it is recommended to double check the python version using `python --version` and download the associated TensorFlow Lite runtime from the given GitHub repository.
 
+Use `pip install tflite-support` to install tflite-support, which is a cross-platform library that helps to deploy TensorFlow Lite models onto mobile devices.
+
 > An [alternative way](https://pimylifeup.com/raspberry-pi-tensorflow-lite/ "Installing TensorFlow Lite on the Raspberry Pi") of installing TensorFlow Lite runtime is given as follows.
 > 1. Add the repository using
 ```bash
@@ -92,10 +94,13 @@ from tflite_runtime.interpreter import Interpreter
 ```
 If there is no error messages, the installation is successful.
 
+* Others
+
+Other python packages such as `argparse`, `protobuf` are also recommended for installation, as they will simplify the python code programming in later stages. Use `pip install` to install these packages similarly.
+
 ### Test TensorFlow Lite using a pre-trained demo model
 
-
-
+Trained models for demonstration purpose can be found online [here](https://www.tensorflow.org/lite/examples "TensorFlow Lite Examples"). These demonstration examples are great for one to get familiar of using TensorFlow Lite on an IoT device. In this project, object detection demo is used for quick setup of the IoT device.
 
 
 ---
@@ -105,6 +110,9 @@ If there is no error messages, the installation is successful.
 ---
 
 ## Development Logs
+
+20220821 - Get starter model with metadata from [TensorFlow](https://www.tensorflow.org/lite/examples/object_detection/overview "TensorFlow > Learn > For Mobile & Edge > Examples"), and store the tflite model in `model/sample-model/`  subdirectory.
+
 
 ---
 
