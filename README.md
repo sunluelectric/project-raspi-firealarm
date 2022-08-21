@@ -98,14 +98,18 @@ If there is no error messages, the installation is successful.
 
 Other python packages such as `argparse`, `protobuf` are also recommended for installation, as they will simplify the python code programming in later stages. Use `pip install` to install these packages similarly.
 
-### Test TensorFlow Lite using a pre-trained demo model
+## Getting Familiar with TensorFlow Lite with Demonstration Models
 
-Trained models for demonstration purpose can be found online [here](https://www.tensorflow.org/lite/examples "TensorFlow Lite Examples"). These demonstration examples are great for one to get familiar of using TensorFlow Lite on an IoT device. In this project, object detection demo is used for quick setup of the IoT device.
-
+Demonstration models can be found online [here](https://www.tensorflow.org/lite/examples "TensorFlow Lite Examples"). These pre-trained demonstration models are widely used for tutorial and they are great for one to get familiar of using TensorFlow Lite on an IoT device. In this project, object detection demo is used for quick setup of the IoT device.
 
 ---
 
 ## Work Package 1: Kitchen image capturing and pre-processing
+
+The purpose of this work package is mainly to collect images of a kitchen, pre-process these images, and label them with fire and human posiitons.
+
+### Collecting images
+
 
 ---
 
@@ -135,3 +139,6 @@ Trained models for demonstration purpose can be found online [here](https://www.
   > Python Engineer, https://youtu.be/c36lUUr864M
 
   > Edge Electronics, https://youtu.be/aimSGOAUI8Y
+
+  > Nicholas Renotte, https://youtu.be/yqkISICHH-U
+
