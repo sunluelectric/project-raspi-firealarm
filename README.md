@@ -111,7 +111,7 @@ Trained models for demonstration purpose can be found online [here](https://www.
 
 ## Development Logs
 
-20220821 - Get starter model with metadata from [TensorFlow](https://www.tensorflow.org/lite/examples/object_detection/overview "TensorFlow > Learn > For Mobile & Edge > Examples"), and store the tflite model in `model/sample-model/`  subdirectory.
+20220821 - Get starter model with metadata from [TensorFlow](https://www.tensorflow.org/lite/examples/object_detection/overview "TensorFlow > Learn > For Mobile & Edge > Examples"), and store the tflite model in `sample/` directory. Download sample programs from [TensorFlow GitHub](https://github.com/tensorflow/examples/tree/master/lite/examples/object_detection/raspberry_pi "tensorflow/examples/lite/examples/object_detection/raspberry_pi/") for testing and analysis purpose.
 
 
 ---
