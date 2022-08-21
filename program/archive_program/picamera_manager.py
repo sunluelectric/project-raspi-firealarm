@@ -3,24 +3,35 @@ import time
 from datetime import datetime
 
 CAMERA_NAME = 'sunlu-iot-1-cam'
+CAMERA_MODE = {'picture', 'vedio'}
 
 class PiCameraManager:
     def __init__(self):
+        self.camera_mode = None
         self.resolution = None
         self.interval = None
         self.framerate = None
         self.save_as_path = None
         self.pi_camera = PiCamera()
+    def set_mode(self, camera_mode: str = 'picture'):
+        if camera_mode in CAMERA_MODE:
+            self.camera_mode = camera_mode
+        else:
+            raise Exception("Unrecognized pi camera mode.")
     def set_resolution(self, resolution: tuple = (640, 480)):
         self.resolution = resolution
         self.pi_camera.resolution = self.resolution
     def set_interval(self, interval: int = 1):
         self.interval = interval
-    def set_save_as_path(self, save_as_path: str = '../data/camera_raw/'):
+    def set_framerate(self, framerate: int = 24):
+        self.framerate = framerate
+    def set_save_as_path(self, save_as_path: str = './'):
         self.save_as_path = save_as_path
     def warmup(self):
         self.pi_camera.start_preview()
         time.sleep(3)
+    def take_a_picture(self):
+        self.pi_camera.capture(self.save_as_path + 'take_a_picture.jpg')
     def take_pictures(self, num: int = None, duration: int = None, start_time: str = None, end_time: str = None) -> int:
         num_taken = 0
         if num:
@@ -75,8 +86,12 @@ class PiCameraManager:
 if __name__ == '__main__':
     print("Initializing ...")
     picam_manager = PiCameraManager()
+    picam_manager.set_mode('picture')
+    picam_manager.set_resolution((320, 240))
+    picam_manager.set_interval(10)
+    picam_manager.set_save_as_path('/home/sunlu/Project/data/camera_raw/')
     picam_manager.warmup()
     print("Start taking pictures...")
-    num_taken = picam_manager.take_pictures(duration = 1800)
-    print("A total number of {} pictures have been taken.".format(num_taken))
+    num_taken = picam_manager.take_pictures(start_time = '013000', end_time = '014500')
+    print("A total number of {} pictures are taken.".format(num_taken))
     _ = input()
