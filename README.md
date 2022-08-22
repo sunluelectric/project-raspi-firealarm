@@ -2,20 +2,21 @@
 
 ---
 
-In this project, a __Raspberry Pi based IoT device__ is developed to __detect unattended cooktops with fire in a kitchen__. A PiCamera is used to continuously capture images in a kitchen, and the images are piped to TensorFlow Lite for human and fire detection. In the case unattended cooktops with fire are detected, an alarm is raised and messaged remotely to a cloud infrastructure.
+In this project, a __Raspberry Pi based IoT device__ is developed to __detect unattended gas cooktops with fire in a kitchen__. The IoT device uses PiCamera to continuously capture images in a kitchen, and the images are piped to TensorFlow Lite for object detection for human and fire. In the case unattended fire is detected, an alarm is raised and messaged to the user through a cloud infrastructure.
 
 The key work packages included in this project are:
 
-1. Kitchen image capturing and pre-processing (for training ANN in the next step)
+1. Kitchen images capturing and processing
+1. Images labeling
 1. ANN training
-1. Real-time image processing for unattended cooktops with fire detection
-1. Remote alarm
+1. Human and fire detection on IoT device
+1. Alarms messaging
 
-Notice that due to the computational power limitation, the ANN training will be carried out on a separate server.  Regardless, the program for building and training the ANN model is still included in the project folder.
+Notice that the images labeling and the ANN training will be carried out on separate servers. Regardless, the details of these work packages, including the software used for images labeling and the program for building and training the ANN model are introduced in this project folder.
 
-__Python 3.9__ is used to develop the majority part of this project. __TensorFlow__ and __TensorFlow Lite__ are the main machine learning engine used for image processing and ANN training.
+__Python 3.9__ is used to develop the majority part of this project. __TensorFlow__ and __TensorFlow Lite__ are the main machine learning engines used for ANN training and real-time object detection.
 
-Git is used to manage and oversee the project development. A development log is given in the later part of this document.
+Git is used to manage and oversee the project development. Development and testing logs are given in the later part of this document.
 
 ---
 
@@ -23,24 +24,26 @@ Git is used to manage and oversee the project development. A development log is 
 
 Configurations such as enabling the PiCamera needs to be setup on the target Raspberry Pi IoT device, and necessary software and associated packages need to be installed. Details are given below.
 
-> Note: use `sudo apt update` and `sudo apt upgrade` to upgrade the OS and installed software before carrying out the preparation work.
+> Note: use `sudo apt update` and `sudo apt upgrade` to upgrade the OS and installed software before carrying out the remaining procudures.
 
-### Enable PiCamera
+### Enabling PiCamera
 
 1. Attach a Pi camera to the device.
 1. Use `sudo raspi-config` to open the Raspberry Pi configuration tool.
-1. Navigate to `Interfacing Options`, from where enable PiCamera.
+1. Navigate to `Interfacing Options` and enable PiCamera.
 1. Reboot the device.
 
 > Note: consider testing the Pi camera using the `test_camera.py` program. Notice that python should be already installed in the Raspberry Pi OS by default.
 
-### Install TensorFlow Lite and its dependencies
+### Installing TensorFlow Lite and its dependencies
 
-Depending on the complexity of the infrastructure, the TensorFlow Lite packages and dependencies can differ. For example, it is often a good practice to run TensorFlow Lite in a specific virtual environment or a container, which may complicate the packages installation procedure. In this project, virtual environment is not used, as the IoT device is dedicated for the project and there shouldn't be an migration problem in the future.
+Depending on the system infrastructure, the required TensorFlow Lite packages and dependencies differ largely. For example, it is often a good practice to run TensorFlow Lite in a virtual environment or a container. This provides an isolated and safe runtime environment for the program, but at the same time add complexity to the packages and dependencies installation and system setup.
 
-* Developer dependencies
+In this project, virtual environment is not used, as the IoT device is dedicated for the project. Neither should there be a migration problem in the future.
 
-The following table gives a list of dependencies that may or may not be helpful with running some of the codes in this project. Installation of these dependencies is optional. Notice that these dependencies are not specifically python packages, thus should be installed using `apt` tool, but not `pip` package installer for python.
+* Dependencies for Raspberry Pi OS
+
+The following table gives a list of dependencies for the Raspberry Pi OS that may be helpful with running some of the codes in this project.
 
 | Dependency | Explanation |
 | ---------- | ----------- |
@@ -57,19 +60,17 @@ The following table gives a list of dependencies that may or may not be helpful 
 | qtbase5-dev | Qt5 base development files |
 | libatlas-base-dev | automatically tuned linear algebra software |
 
-> Use `apt-cache search <library-name>` to search for the brief introduction to a dependency, and `apt-cache policy <library-name>` to check the latest version and the installed version of a dependency, if the dependency exists in the repository. Use `apt install <library-name>` to install a dependency.
+> Use `apt-cache search <library-name>` to search for a brief introduction to a dependency, and `apt-cache policy <library-name>` to check the latest version and the installed version of a dependency, if the dependency exists in the repository. Use `sudo apt install <library-name>` to install a dependency.
 
-* OpenCV for python
+* Python packages
 
 __OpenCV (Open Source Computer Vision Library)__ is an open-source library that includes many computer vision algorithms. Install OpenCV for python using `pip install opencv-python`.
 
-* TensorFlow
+__TensorFlow__ and __TensorFlow Lite__ are the main machine learning engines used in this project. Notice that in the IoT device, installation of TensorFlow is optional, as it is used for only ANN training, which is carried out on a separate server. However, installation of TensorFlow Lite runtime is compulsory.  
 
 Use `pip install tensorflow` to install TensorFlow.
 
-* TensorFlow Lite runtime
-
-Use `pip install https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-cp39-cp39-linux_armv7l.whl` to install TensorFlow Lite runtime. Notice that it is recommended to double check the python version using `python --version` and download the associated TensorFlow Lite runtime from the given GitHub repository.
+Use `pip install https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-cp39-cp39-linux_armv7l.whl` to install TensorFlow Lite runtime, if python 3.9 is used. Notice that it is recommended to double check the python version using `python --version` before this installation, and download the associated TensorFlow Lite runtime from the GitHub repository.
 
 Use `pip install tflite-support` to install tflite-support, which is a cross-platform library that helps to deploy TensorFlow Lite models onto mobile devices.
 
@@ -88,34 +89,45 @@ sudo apt update
 sudo apt install python3-tflite-runtime
 ```
 
-Open the python terminal using `python`, and test TensorFlow Lite runtime installation using
+To verify the installation of TensorFlow Lite, run `python` with the following command
 ```python
 from tflite_runtime.interpreter import Interpreter
 ```
 If there is no error messages, the installation is successful.
 
-* Others
+Other python packages such as `argparse`, `protobuf` are also recommended for installation, as they will simplify the python code programming in later stages. Use `pip install <package-name>` to install these packages.
 
-Other python packages such as `argparse`, `protobuf` are also recommended for installation, as they will simplify the python code programming in later stages. Use `pip install` to install these packages similarly.
+## Getting familiar with TensorFlow Lite using demonstration examples
 
-## Getting Familiar with TensorFlow Lite with Demonstration Models
+Demonstration examples can be found from [TensorFlow](https://www.tensorflow.org/lite/examples "TensorFlow Lite Examples"). These examples are great for one to get familiar of using TensorFlow Lite on IoT devices.
 
-Demonstration models can be found online [here](https://www.tensorflow.org/lite/examples "TensorFlow Lite Examples"). These pre-trained demonstration models are widely used for tutorial and they are great for one to get familiar of using TensorFlow Lite on an IoT device. In this project, object detection demo is used for quick setup of the IoT device.
+In this project, object detection demonstration example is used which helps with the setup of the IoT device, and this sample example is included in `sample-example/`.
 
 ---
 
-## Work Package 1: Kitchen image capturing and pre-processing
+## Work Package 1: Kitchen images capturing and processing
 
-The purpose of this work package is mainly to collect images of a kitchen, pre-process these images, and label them with fire and human posiitons.
-
-### Collecting images
+The purpose of this work package is mainly to automatically collect massive images from a kitchen and carry out necessary image processing. These pictures are later transferred to a separate server for image labeling.
 
 There are multiple ways to program a piece of python code to collect massive JPG files taken from the Raspberry Pi Camera. To name a few, it is possible to use `PiCamera` package as used in the `test_camera.py` program, or use `VideoCapture` tool provided by `opencv-python`. Both of the above approaches should satisfy the purpose. Notice that `VideoCapture` approach is more general in the sense that it can be used not only on Raspberry Pi but also other devices as long as it has a camera. Therefore, `VideoCapture` approach is adopted for collecting images in this project.
 
-### Labeling images
+---
+
+## Work Package 2: Images labeling
 
 Labeling of images are done not on the IoT device, but on the server with a specific tool.
 
+---
+
+## Work Package 3: ANN training
+
+---
+
+## Work Package 4: Human and fire detection on IoT device
+
+---
+
+## Work Package 5: Alarms messaging
 
 ---
 
@@ -147,4 +159,3 @@ Labeling of images are done not on the IoT device, but on the server with a spec
   > Edge Electronics, https://youtu.be/aimSGOAUI8Y
 
   > Nicholas Renotte, https://youtu.be/yqkISICHH-U
-
