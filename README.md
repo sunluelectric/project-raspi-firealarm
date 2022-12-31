@@ -56,7 +56,7 @@ The following table gives a list of dependencies for the Raspberry Pi OS that ma
 | libswscale-dev | development files for FFmpeg library for image scaling and various conversions |
 | libv41-dev | a collection of libraries which adds a thin abstraction layer on top of video4linux2 devices |
 | libxvidcore-dev | development files for the open source MPEG-4 video codec |
-| libx264-dev | advanced encoding library for creating H.264 (MPEG-4 AVC) video strams |
+| libx264-dev | advanced encoding library for creating H.264 (MPEG-4 AVC) video streams |
 | qtbase5-dev | Qt5 base development files |
 | libatlas-base-dev | automatically tuned linear algebra software |
 
